@@ -1,11 +1,7 @@
 package es.manuelrc.userlist.view.userlist
 
-import android.Manifest
-import android.content.pm.PackageManager
+
 import android.location.Location
-import androidx.core.app.ActivityCompat
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import es.manuelrc.userlist.R
@@ -26,8 +22,6 @@ class UserListViewModel @Inject constructor(private val interactor: UserListInte
     val mUsers = interactor.observeUsers
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> get() = _isLoading
-    private val _exception = MutableStateFlow(Exception())
-    val exception: StateFlow<Exception> get() = _exception
     private var currentLocation: Location? = null
     private val _snackbarText = MutableStateFlow(Event(0))
     val snackbarMessage: StateFlow<Event<Int>> = _snackbarText
@@ -35,7 +29,7 @@ class UserListViewModel @Inject constructor(private val interactor: UserListInte
     private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
         CoroutineScope(Dispatchers.Main).launch {
             throwable.printStackTrace()
-            _exception.value = Exception(throwable)
+            _snackbarText.value = Event(R.string.unknown_error)
         }
     }
 
