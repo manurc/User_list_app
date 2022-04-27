@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">User list</string>
+    <string name="description_img_photo">user photo</string>
+    <string name="users_list">Users List</string>
+    <string name="users_description">User Description</string>
+    <string name="location">Location:</string>
+    <string name="gender">Gender:</string>
+    <string name="gender_cb">Gender</string>
+    <string name="name">Name:</string>
+    <string name="name_cb">Name</string>
+    <string name="registered">Registered date:</string>
+    <string name="email">Email:</string>
+    <string name="dialog_delete_title">Delete User?</string>
+    <string name="dialog_delete_confirm">Delete</string>
+    <string name="dialog_delete_cancel">Cancel</string>
+    <string name="description_person_add">add user</string>
+    <string name="search">Search</string>
+    <string name="search_hint">name,surname,email</string>
+    <string name="favorites">favorites</string>
+    <string name="distance_cb"><![CDATA[<= 1km]]></string>
+    <string name="error_downloading_users">error downloading users</string>
+    <string name="unknown_error">unknown error</string>
+    <string name="error_location">error with device location</string>
+    <string name="user_added">user added</string>
+    <string name="error_obtaining_from_db">error obtaining data from db</string>
+    <string name="error_inserting_to_db">error inserting data into db</string>
+    <string name="error_updating_data_to_db">error updating data to db</string>
+    <string name="error_deleting_data">error deleting data</string>
+</resources>

@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <ImageView
+            android:id="@+id/imgPhoto"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/img_large_size"
+            android:layout_margin="@dimen/common_padding_min"
+            android:background="@android:color/darker_gray"
+            android:contentDescription="@string/description_img_photo"
+            app:layout_constraintDimensionRatio="H, 1:1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:loadImage="@{userDetailViewModel.userSelected.picture.large}" />
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            app:isVisible="@{userDetailViewModel.isLoading}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvGender1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/common_padding_min"
+            android:text="@string/gender"
+            android:textAppearance="?attr/textAppearanceBody2"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imgPhoto" />
+
+
+        <TextView
+            android:id="@+id/tvGender2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/common_padding_min"
+            android:text="@{userDetailViewModel.userSelected.gender}"
+            android:textAppearance="?attr/textAppearanceBody2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tvGender1"
+            app:layout_constraintTop_toBottomOf="@+id/imgPhoto"
+            tools:text="female" />
+
+
+        <TextView
+            android:id="@+id/tvName1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/common_padding_min"
+            android:text="@string/name"
+            android:textAppearance="?attr/textAppearanceBody2"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvGender1" />
+
+        <TextView
+            android:id="@+id/tvName2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/common_padding_min"
+            android:text="@{userDetailViewModel.userSelected.fullName}"
+            android:textAppearance="?attr/textAppearanceBody2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tvName1"
+            app:layout_constraintTop_toBottomOf="@+id/tvGender1"
+            tools:text="name surname" />
+
+
+        <TextView
+            android:id="@+id/tvLocation1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/common_padding_min"
+            android:text="@string/location"
+            android:textAppearance="?attr/textAppearanceBody2"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvName1" />
+
+        <TextView
+            android:id="@+id/tvLocation2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/common_padding_min"
+            android:text="@{userDetailViewModel.userSelected.location.toString()}"
+            android:textAppearance="?attr/textAppearanceBody2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tvLocation1"
+            app:layout_constraintTop_toBottomOf="@+id/tvName1"
+            tools:text="Street city state" />
+
+
+        <TextView
+            android:id="@+id/tvRegistered1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/common_padding_min"
+            android:text="@string/registered"
+            android:textAppearance="?attr/textAppearanceBody2"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvLocation2" />
+
+        <TextView
+            android:id="@+id/tvRegistered2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/common_padding_min"
+            android:text="@{userDetailViewModel.userSelected.registered.date}"
+            android:textAppearance="?attr/textAppearanceBody2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tvRegistered1"
+            app:layout_constraintTop_toBottomOf="@+id/tvLocation2"
+            tools:text="2017-08-09" />
+
+
+        <TextView
+            android:id="@+id/tvEmail1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/common_padding_min"
+            android:text="@string/email"
+            android:textAppearance="?attr/textAppearanceBody2"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvRegistered1" />
+
+        <TextView
+            android:id="@+id/tvEmail2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/common_padding_min"
+            android:text="@{userDetailViewModel.userSelected.email}"
+            android:textAppearance="?attr/textAppearanceBody2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tvEmail1"
+            app:layout_constraintTop_toBottomOf="@+id/tvRegistered1"
+            tools:text="user@gmail.com" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <data>
+
+        <variable
+            name="userDetailViewModel"
+            type="es.manuelrc.userlist.view.userdetails.UserDetailViewModel" />
+    </data>
+</layout>
