@@ -22,6 +22,8 @@ class UserListViewModel @Inject constructor(private val interactor: UserListInte
     val mUsers = interactor.observeUsers
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> get() = _isLoading
+    private val _sortType = MutableStateFlow(Event(FilterConstrains.OrderedEnum.NAME))
+    val sortType: StateFlow<Event<FilterConstrains.OrderedEnum>> get() = _sortType
     private var currentLocation: Location? = null
     private val _snackbarText = MutableStateFlow(Event(0))
     val snackbarMessage: StateFlow<Event<Int>> = _snackbarText
@@ -69,6 +71,9 @@ class UserListViewModel @Inject constructor(private val interactor: UserListInte
         isLocation: Boolean? = null,
         query: String? = null,
     ) {
+        if(order!=null){
+            _sortType.value = Event(order)
+        }
         executeAction {
             interactor.updateFilter(order, isFavorite, isLocation, currentLocation, query)
         }

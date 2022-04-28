@@ -88,6 +88,23 @@ class UserListFragment : Fragment(), OnUserClickListener {
                     mBinding.progressBar.isVisible = it
                 }
             }
+            lifecycleScope.launch {
+                sortType.collect { event->
+                    val sort = event.getContentIfNotHandled()
+                    if (sort != null) {
+                        when (sort) {
+                            FilterConstrains.OrderedEnum.GENDER -> {
+                                mBinding.cbGender.isChecked = true
+                                mBinding.cbName.isChecked =false
+                            }
+                            FilterConstrains.OrderedEnum.NAME -> {
+                                mBinding.cbGender.isChecked = false
+                                mBinding.cbName.isChecked =true
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -107,11 +124,9 @@ class UserListFragment : Fragment(), OnUserClickListener {
 
             cbGender.setOnClickListener {
                 mUserListViewModel.filterUsers(FilterConstrains.OrderedEnum.GENDER)
-                cbName.isChecked = false
             }
             cbName.setOnClickListener {
                 mUserListViewModel.filterUsers(FilterConstrains.OrderedEnum.NAME)
-                cbGender.isChecked = false
             }
         }
     }
@@ -136,11 +151,7 @@ class UserListFragment : Fragment(), OnUserClickListener {
                 }
 
                 override fun onQueryTextChange(s: String): Boolean {
-                    if (s.isEmpty()) {
-                        mUserListViewModel.filterUsers(query = "")
-                    } else {
-                        mUserListViewModel.filterUsers(query = s)
-                    }
+                    mUserListViewModel.filterUsers(query = s)
                     return false
                 }
             })
