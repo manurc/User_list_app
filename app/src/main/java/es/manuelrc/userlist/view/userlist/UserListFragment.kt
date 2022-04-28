@@ -89,17 +89,16 @@ class UserListFragment : Fragment(), OnUserClickListener {
                 }
             }
             lifecycleScope.launch {
-                sortType.collect { event->
-                    val sort = event.getContentIfNotHandled()
-                    if (sort != null) {
-                        when (sort) {
+                sortType.collect { event ->
+                    event.getContentIfNotHandled()?.let { order->
+                        when (order) {
                             FilterConstrains.OrderedEnum.GENDER -> {
                                 mBinding.cbGender.isChecked = true
-                                mBinding.cbName.isChecked =false
+                                mBinding.cbName.isChecked = false
                             }
                             FilterConstrains.OrderedEnum.NAME -> {
                                 mBinding.cbGender.isChecked = false
-                                mBinding.cbName.isChecked =true
+                                mBinding.cbName.isChecked = true
                             }
                         }
                     }
