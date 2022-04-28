@@ -74,6 +74,9 @@ class UserListViewModel @Inject constructor(private val interactor: UserListInte
         if(order!=null){
             _sortType.value = Event(order)
         }
+        if(currentLocation==null){
+            _snackbarText.value = Event(R.string.error_location)
+        }
         executeAction {
             interactor.updateFilter(order, isFavorite, isLocation, currentLocation, query)
         }

@@ -5,7 +5,9 @@ import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Looper
+import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -13,10 +15,14 @@ import com.google.android.gms.location.*
 import dagger.hilt.android.AndroidEntryPoint
 import es.manuelrc.userlist.R
 import es.manuelrc.userlist.view.userlist.UserListViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+
+    @Inject
+    lateinit var mSharedViewModel: SharedViewModel
 
     @Inject
     lateinit var mUserListViewModel: UserListViewModel
@@ -29,8 +35,19 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        setupViewModels()
         setupNavController()
         askPermissions()
+    }
+
+    private fun setupViewModels() {
+        lifecycleScope.launch {
+            mSharedViewModel.locationPermission.collect{
+                it.getContentIfNotHandled()?.let {
+                    askPermissions()
+                }
+            }
+        }
     }
 
     private fun setupNavController() {

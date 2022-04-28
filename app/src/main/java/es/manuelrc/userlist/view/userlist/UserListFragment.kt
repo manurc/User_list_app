@@ -18,11 +18,15 @@ import es.manuelrc.userlist.data.Result
 import es.manuelrc.userlist.data.source.FilterConstrains
 import es.manuelrc.userlist.databinding.FragmentUserListBinding
 import es.manuelrc.userlist.model.UserEntity
+import es.manuelrc.userlist.view.SharedViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class UserListFragment : Fragment(), OnUserClickListener {
+
+    @Inject
+    lateinit var mSharedViewModel: SharedViewModel
 
     @Inject
     lateinit var mUserListViewModel: UserListViewModel
@@ -77,6 +81,7 @@ class UserListFragment : Fragment(), OnUserClickListener {
                     val msg = event.getContentIfNotHandled()
                     if (msg != null && event.peekContent() != 0) {
                         view?.let {
+                            if(msg == R.string.error_location) mBinding.cbDistance.isChecked= false
                             Snackbar.make(mBinding.root, getString(msg), Snackbar.LENGTH_SHORT)
                                 .show()
                         }
@@ -118,6 +123,7 @@ class UserListFragment : Fragment(), OnUserClickListener {
             }
 
             cbDistance.setOnClickListener {
+                mSharedViewModel.askLocation()
                 mUserListViewModel.filterUsers(isLocation = cbDistance.isChecked)
             }
 
