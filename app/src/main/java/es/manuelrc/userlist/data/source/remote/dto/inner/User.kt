@@ -1,6 +1,6 @@
 package es.manuelrc.userlist.data.source.remote.dto.inner
 
-data class Result(
+data class User(
     val gender: String,
     val name: Name,
     val location: Location,

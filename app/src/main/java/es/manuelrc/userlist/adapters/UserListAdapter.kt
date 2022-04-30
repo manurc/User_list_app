@@ -14,7 +14,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import es.manuelrc.userlist.R
 import es.manuelrc.userlist.databinding.ItemUserBinding
 import es.manuelrc.userlist.model.UserEntity
-import es.manuelrc.userlist.view.userlist.UserListFragmentDirections
+import es.manuelrc.userlist.view.UserListFragmentDirections
 
 class UserListAdapter(private var listener: OnUserClickListener) :
     ListAdapter<UserEntity, RecyclerView.ViewHolder>(UserDiffCallback()) {

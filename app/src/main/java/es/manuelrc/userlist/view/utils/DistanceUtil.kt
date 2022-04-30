@@ -1,4 +1,4 @@
-package es.manuelrc.userlist.view
+package es.manuelrc.userlist.view.utils
 
 import kotlin.math.acos
 import kotlin.math.cos
@@ -8,7 +8,9 @@ object DistanceUtil {
 
     fun distanceInKm(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double {
         val theta = lon1 - lon2
-        var dist = sin(deg2rad(lat1)) * sin(deg2rad(lat2)) + cos(deg2rad(lat1)) * cos(deg2rad(lat2)) * cos(deg2rad(theta))
+        var dist = sin(deg2rad(lat1)) * sin(deg2rad(lat2)) + cos(deg2rad(lat1)) * cos(deg2rad(lat2)) * cos(
+            deg2rad(theta)
+        )
         dist = acos(dist)
         dist = rad2deg(dist)
         dist *= 60 * 1.1515

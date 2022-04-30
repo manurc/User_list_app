@@ -1,6 +1,7 @@
-package es.manuelrc.userlist.view
+package es.manuelrc.userlist.viewmodels
 
 import androidx.lifecycle.ViewModel
+import es.manuelrc.userlist.view.utils.Event
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
@@ -15,4 +16,6 @@ class SharedViewModel @Inject constructor(): ViewModel() {
     fun askLocation(){
         _locationPermission.value = Event(true)
     }
+
+
 }

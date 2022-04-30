@@ -1,4 +1,4 @@
-package es.manuelrc.userlist.view
+package es.manuelrc.userlist.view.utils
 
 import androidx.lifecycle.Observer
 

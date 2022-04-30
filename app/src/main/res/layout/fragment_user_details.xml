@@ -157,6 +157,6 @@
 
         <variable
             name="userDetailViewModel"
-            type="es.manuelrc.userlist.view.userdetails.UserDetailViewModel" />
+            type="es.manuelrc.userlist.viewmodels.UserDetailViewModel" />
     </data>
 </layout>

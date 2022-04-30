@@ -1,4 +1,4 @@
-package es.manuelrc.userlist.view.userdetails
+package es.manuelrc.userlist.view
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,6 +12,7 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import es.manuelrc.userlist.R
 import es.manuelrc.userlist.databinding.FragmentUserDetailsBinding
+import es.manuelrc.userlist.viewmodels.UserDetailViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

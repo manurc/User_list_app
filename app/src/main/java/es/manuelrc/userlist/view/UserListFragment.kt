@@ -1,4 +1,4 @@
-package es.manuelrc.userlist.view.userlist
+package es.manuelrc.userlist.view
 
 import android.os.Bundle
 import android.view.*
@@ -18,7 +18,8 @@ import es.manuelrc.userlist.data.Result
 import es.manuelrc.userlist.data.source.FilterConstrains
 import es.manuelrc.userlist.databinding.FragmentUserListBinding
 import es.manuelrc.userlist.model.UserEntity
-import es.manuelrc.userlist.view.SharedViewModel
+import es.manuelrc.userlist.viewmodels.SharedViewModel
+import es.manuelrc.userlist.viewmodels.UserListViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -73,6 +74,8 @@ class UserListFragment : Fragment(), OnUserClickListener {
                     if (userList is Result.Success) {
                         mAdapter.submitList(userList.data)
                         if (userList.data.isEmpty()) mUserListViewModel.loadUsers()
+                    } else if (userList is Result.Error){
+                        mUserListViewModel.errorLoading(userList.exception)
                     }
                 }
             }

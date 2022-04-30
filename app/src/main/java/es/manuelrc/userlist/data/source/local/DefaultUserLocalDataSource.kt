@@ -24,9 +24,9 @@ class DefaultUserLocalDataSource @Inject constructor(private val userDao: UserDa
             try {
                 val user = userDao.findUser(userEmail)
                 if (user != null) {
-                    return@withContext Result.Success(user.last())
+                    return@withContext Result.Success(user)
                 } else {
-                    return@withContext Result.Error(Exception("User not found"))
+                    return@withContext Result.Error(DBException(DBExceptionType.USER_NOT_FOUND))
                 }
             } catch (e: Exception) {
                 return@withContext Result.Error(e)

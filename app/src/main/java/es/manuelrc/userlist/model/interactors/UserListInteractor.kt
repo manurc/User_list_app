@@ -7,7 +7,7 @@ import es.manuelrc.userlist.data.Result
 import es.manuelrc.userlist.data.source.FilterConstrains
 import es.manuelrc.userlist.data.source.UserRepository
 import es.manuelrc.userlist.model.UserEntity
-import es.manuelrc.userlist.view.DistanceUtil
+import es.manuelrc.userlist.view.utils.DistanceUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.withContext
@@ -22,7 +22,7 @@ class UserListInteractor @Inject constructor(private val userRepository: UserRep
          userRepository.observeUsers().map { resultList ->
             when (resultList) {
                 is Result.Success -> applyFilter(resultList.data,filter)
-                is Result.Error -> Result.Error(Exception("Error al obtener los usuarios"))
+                is Result.Error -> resultList
             }
         }
     }

@@ -1,13 +1,11 @@
-package es.manuelrc.userlist.view.userdetails
+package es.manuelrc.userlist.viewmodels
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import es.manuelrc.userlist.R
 import es.manuelrc.userlist.data.Result
 import es.manuelrc.userlist.model.UserEntity
 import es.manuelrc.userlist.model.interactors.UserDetailsInteractor
-import es.manuelrc.userlist.view.Event
+import es.manuelrc.userlist.view.utils.Event
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
@@ -20,8 +18,8 @@ class UserDetailViewModel @Inject constructor(private val interactor: UserDetail
     val snackbarMessage: StateFlow<Event<Int>> = _snackbarText
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> get() = _isLoading
-    private var _userSelected = MutableLiveData<UserEntity>()
-    val userSelected: LiveData<UserEntity> get() = _userSelected
+    private var _userSelected:MutableStateFlow<UserEntity?> = MutableStateFlow(null)
+    val userSelected: StateFlow<UserEntity?> get() = _userSelected
 
     suspend fun findUser(userIdentifier: String) {
         _isLoading.value = true

@@ -5,7 +5,6 @@ import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Looper
-import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
@@ -14,7 +13,8 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import com.google.android.gms.location.*
 import dagger.hilt.android.AndroidEntryPoint
 import es.manuelrc.userlist.R
-import es.manuelrc.userlist.view.userlist.UserListViewModel
+import es.manuelrc.userlist.viewmodels.SharedViewModel
+import es.manuelrc.userlist.viewmodels.UserListViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

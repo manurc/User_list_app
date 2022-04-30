@@ -1,4 +1,4 @@
-package es.manuelrc.userlist.view.userlist
+package es.manuelrc.userlist.viewmodels
 
 
 import android.location.Location
@@ -6,9 +6,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import es.manuelrc.userlist.R
 import es.manuelrc.userlist.data.source.FilterConstrains
+import es.manuelrc.userlist.data.source.local.DBException
+import es.manuelrc.userlist.data.source.remote.ApiResponseException
 import es.manuelrc.userlist.model.UserEntity
 import es.manuelrc.userlist.model.interactors.UserListInteractor
-import es.manuelrc.userlist.view.Event
+import es.manuelrc.userlist.view.utils.Event
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -31,7 +33,11 @@ class UserListViewModel @Inject constructor(private val interactor: UserListInte
     private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
         CoroutineScope(Dispatchers.Main).launch {
             throwable.printStackTrace()
-            _snackbarText.value = Event(R.string.unknown_error)
+            var msg = R.string.unknown_error
+            if (throwable.cause is ApiResponseException) {
+                msg = R.string.error_downloading_users
+            }
+            _snackbarText.value = Event(msg)
         }
     }
 
@@ -55,14 +61,22 @@ class UserListViewModel @Inject constructor(private val interactor: UserListInte
 
     fun addUser() {
         executeAction {
-            interactor.addNewUser{
+            interactor.addNewUser {
                 _snackbarText.value = Event(R.string.user_added)
             }
         }
     }
 
-    fun updateLocation(location:Location){
+    fun updateLocation(location: Location) {
         this.currentLocation = location
+    }
+
+    fun errorLoading(exception: Exception) {
+        var msg = R.string.unknown_error
+        if (exception is DBException) {
+            msg = R.string.error_obtaining_from_db
+        }
+        _snackbarText.value = Event(msg)
     }
 
     fun filterUsers(
@@ -71,10 +85,10 @@ class UserListViewModel @Inject constructor(private val interactor: UserListInte
         isLocation: Boolean? = null,
         query: String? = null,
     ) {
-        if(order!=null){
+        if (order != null) {
             _sortType.value = Event(order)
         }
-        if(currentLocation==null){
+        if (currentLocation == null) {
             _snackbarText.value = Event(R.string.error_location)
         }
         executeAction {
