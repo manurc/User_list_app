@@ -1,11 +1,9 @@
 package es.manuelrc.userlist.di
 
-import android.content.Context
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import dagger.Module
 import dagger.Provides
-import dagger.hilt.android.qualifiers.ApplicationContext
 import es.manuelrc.userlist.data.source.DefaultUserRepository
 import es.manuelrc.userlist.data.source.UserRepository
 import es.manuelrc.userlist.data.source.local.DefaultUserLocalDataSource

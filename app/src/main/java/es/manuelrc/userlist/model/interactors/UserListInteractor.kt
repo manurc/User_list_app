@@ -1,8 +1,6 @@
 package es.manuelrc.userlist.model.interactors
 
 import android.location.Location
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.asFlow
 import es.manuelrc.userlist.data.Result
 import es.manuelrc.userlist.data.source.FilterConstrains
 import es.manuelrc.userlist.data.source.UserRepository
@@ -15,21 +13,20 @@ import javax.inject.Inject
 
 class UserListInteractor @Inject constructor(private val userRepository: UserRepository) {
 
-    private val _filter: MutableLiveData<FilterConstrains> =
-        MutableLiveData(FilterConstrains(FilterConstrains.OrderedEnum.NAME))
+    private val _filter: MutableStateFlow<FilterConstrains> = MutableStateFlow(FilterConstrains(FilterConstrains.OrderedEnum.NAME))
 
-    val observeUsers = _filter.asFlow().flatMapLatest { filter ->
+    val observeUsers = _filter.flatMapLatest { filter ->
          userRepository.observeUsers().map { resultList ->
             when (resultList) {
                 is Result.Success -> applyFilter(resultList.data,filter)
                 is Result.Error -> resultList
             }
         }
-    }
+    }.distinctUntilChanged()
 
     suspend fun loadUsers() {
-        if ((_filter.value?.isFavorite == false || _filter.value?.isFavorite == null) &&
-            (_filter.value?.isLocation == false || _filter.value?.isLocation == null)
+        if ((_filter.value.isFavorite == false || _filter.value.isFavorite == null) &&
+            (_filter.value.isLocation == false || _filter.value.isLocation == null)
         )
             userRepository.addNewUsers(5)
     }
@@ -55,8 +52,8 @@ class UserListInteractor @Inject constructor(private val userRepository: UserRep
         location: Location?,
         query: String?
     ) {
-        val filter = _filter.value?.copy()
-        filter?.apply {
+        val filter = _filter.value.copy()
+        filter.apply {
             if (order != null) this.order = order
             if (isFavorite != null) this.isFavorite = isFavorite
             if (isLocation != null) this.isLocation = isLocation

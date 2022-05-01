@@ -14,23 +14,20 @@ class DefaultUserRemoteDataSource @Inject constructor(private val userApiClient:
             try {
                 val response = userApiClient.getUsers(amount)
                 if(response.isSuccessful){
-                    val userEntityList:MutableList<UserEntity> = mutableListOf()
-                    response.body()?.results?.forEach {
-                        userEntityList.add(
-                            UserEntity(
-                                it.gender,
-                                it.name.first,
-                                it.name.last,
-                                it.email,
-                                it.picture,
-                                it.phone,
-                                it.location,
-                                it.registered,
-                                false
-                            )
+                    val users= response.body()?.results ?: emptyList()
+                    Result.Success(users.map {
+                        UserEntity(
+                            it.gender,
+                            it.name.first,
+                            it.name.last,
+                            it.email,
+                            it.picture,
+                            it.phone,
+                            it.location,
+                            it.registered,
+                            false
                         )
-                    }
-                    Result.Success(userEntityList)
+                    })
                 }else{
                     Result.Error(ApiResponseException(response.code()))
                 }

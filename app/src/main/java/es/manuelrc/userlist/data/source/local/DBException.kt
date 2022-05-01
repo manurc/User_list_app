@@ -1,3 +1,5 @@
 package es.manuelrc.userlist.data.source.local
 
-class DBException(val type: DBExceptionType) : Exception()
+import es.manuelrc.userlist.model.exceptions.TypeError
+
+class DBException(val type: TypeError) : Exception()

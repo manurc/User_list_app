@@ -9,6 +9,7 @@ import es.manuelrc.userlist.data.source.FilterConstrains
 import es.manuelrc.userlist.data.source.local.DBException
 import es.manuelrc.userlist.data.source.remote.ApiResponseException
 import es.manuelrc.userlist.model.UserEntity
+import es.manuelrc.userlist.model.exceptions.TypeError
 import es.manuelrc.userlist.model.interactors.UserListInteractor
 import es.manuelrc.userlist.view.utils.Event
 import kotlinx.coroutines.*
@@ -74,7 +75,13 @@ class UserListViewModel @Inject constructor(private val interactor: UserListInte
     fun errorLoading(exception: Exception) {
         var msg = R.string.unknown_error
         if (exception is DBException) {
-            msg = R.string.error_obtaining_from_db
+            msg = when(exception.type){
+                TypeError.GET -> R.string.error_obtaining_from_db
+                TypeError.INSERT -> R.string.error_inserting_to_db
+                TypeError.UPDATE -> R.string.error_updating_data_to_db
+                TypeError.DELETE -> R.string.error_deleting_data
+                TypeError.LOCATION_NULL -> R.string.error_location
+            }
         }
         _snackbarText.value = Event(msg)
     }
@@ -89,7 +96,7 @@ class UserListViewModel @Inject constructor(private val interactor: UserListInte
             _sortType.value = Event(order)
         }
         if (currentLocation == null) {
-            _snackbarText.value = Event(R.string.error_location)
+            errorLoading(DBException(TypeError.LOCATION_NULL))
         }
         executeAction {
             interactor.updateFilter(order, isFavorite, isLocation, currentLocation, query)

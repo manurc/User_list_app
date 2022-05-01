@@ -5,7 +5,5 @@ enum class TypeError {
     INSERT,
     UPDATE,
     DELETE,
-    LOCATION_NULL,
-    EMPTY_DB,
-    NONE
+    LOCATION_NULL
 }

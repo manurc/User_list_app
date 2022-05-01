@@ -3,6 +3,7 @@ package es.manuelrc.userlist.data.source.local
 import es.manuelrc.userlist.data.Result
 import es.manuelrc.userlist.model.UserDao
 import es.manuelrc.userlist.model.UserEntity
+import es.manuelrc.userlist.model.exceptions.TypeError
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -26,7 +27,7 @@ class DefaultUserLocalDataSource @Inject constructor(private val userDao: UserDa
                 if (user != null) {
                     return@withContext Result.Success(user)
                 } else {
-                    return@withContext Result.Error(DBException(DBExceptionType.USER_NOT_FOUND))
+                    return@withContext Result.Error(DBException(TypeError.GET))
                 }
             } catch (e: Exception) {
                 return@withContext Result.Error(e)
@@ -35,15 +36,33 @@ class DefaultUserLocalDataSource @Inject constructor(private val userDao: UserDa
 
 
     override suspend fun addNewUser(user: UserEntity) = withContext(Dispatchers.IO) {
-        userDao.addUsers(user)
+        try {
+            userDao.addUsers(user)
+        }catch (e: Exception){
+            e.printStackTrace()
+            throw DBException(TypeError.INSERT)
+        }
+
     }
 
     override suspend fun deleteUser(user: UserEntity) = withContext<Unit>(Dispatchers.IO) {
-        userDao.deleteUser(user)
+        try {
+            userDao.deleteUser(user)
+        }catch (e: Exception){
+            e.printStackTrace()
+            throw DBException(TypeError.DELETE)
+        }
+
     }
 
     override suspend fun updateUser(user: UserEntity) = withContext<Unit>(Dispatchers.IO) {
-        userDao.updateUser(user)
+        try {
+            userDao.updateUser(user)
+        }catch (e: Exception){
+            e.printStackTrace()
+            throw DBException(TypeError.UPDATE)
+        }
+
     }
 
 }

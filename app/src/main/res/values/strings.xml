@@ -10,9 +10,6 @@
     <string name="name_cb">Name</string>
     <string name="registered">Registered date:</string>
     <string name="email">Email:</string>
-    <string name="dialog_delete_title">Delete User?</string>
-    <string name="dialog_delete_confirm">Delete</string>
-    <string name="dialog_delete_cancel">Cancel</string>
     <string name="description_person_add">add user</string>
     <string name="search">Search</string>
     <string name="search_hint">name,surname,email</string>

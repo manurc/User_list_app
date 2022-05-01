@@ -2,11 +2,11 @@ package es.manuelrc.userlist.data.source
 
 import es.manuelrc.userlist.data.Result
 import es.manuelrc.userlist.data.source.local.DBException
-import es.manuelrc.userlist.data.source.local.DBExceptionType
 import es.manuelrc.userlist.data.source.local.UserLocalDataSource
 import es.manuelrc.userlist.data.source.remote.ApiResponseException
 import es.manuelrc.userlist.data.source.remote.UserRemoteDataSource
 import es.manuelrc.userlist.model.UserEntity
+import es.manuelrc.userlist.model.exceptions.TypeError
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
@@ -43,7 +43,7 @@ class DefaultUserRepositoryTest : TestCase() {
 
     @Test
     fun testEmptyLocalDataSource() = runTest(dispatchTimeoutMs = 2_000) {
-        val exceptionResult = DBException(DBExceptionType.USER_NOT_FOUND)
+        val exceptionResult = DBException(TypeError.GET)
         coEvery { userLocalDataSource.getUser(any()) } returns Result.Error(exceptionResult)
         val result = userRepository.getUser("userEmail")
         assertNotNull(result)
@@ -66,7 +66,7 @@ class DefaultUserRepositoryTest : TestCase() {
     }
 
     @Test
-    fun testGetUser() = runTest() {
+    fun testGetUser() = runTest {
         val user = mockk<UserEntity>()
         coEvery { userLocalDataSource.getUser(any()) } returns Result.Success(user)
         val result = userRepository.getUser("userEmail")
@@ -75,7 +75,7 @@ class DefaultUserRepositoryTest : TestCase() {
     }
 
     @Test
-    fun testAddUser() = runTest() {
+    fun testAddUser() = runTest {
         val fakeLocalDataStore = mutableListOf<UserEntity>()
         val user = listOf(mockk<UserEntity>())
         coEvery { userRemoteDataSource.getUsers(any()) } returns Result.Success(user)
