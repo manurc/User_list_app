@@ -18,7 +18,7 @@ import org.junit.Test
 import kotlin.Exception
 
 @ExperimentalCoroutinesApi
-class UserDetailViewModelTest: TestCase() {
+class UserDetailViewModelTest : TestCase() {
 
     @MockK
     lateinit var userDetailsInteractor: UserDetailsInteractor

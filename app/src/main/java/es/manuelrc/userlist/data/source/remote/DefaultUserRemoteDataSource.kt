@@ -10,11 +10,11 @@ class DefaultUserRemoteDataSource @Inject constructor(private val userApiClient:
     UserRemoteDataSource {
 
     override suspend fun getUsers(amount: Int): Result<List<UserEntity>> {
-        return withContext(Dispatchers.IO){
+        return withContext(Dispatchers.IO) {
             try {
                 val response = userApiClient.getUsers(amount)
-                if(response.isSuccessful){
-                    val users= response.body()?.results ?: emptyList()
+                if (response.isSuccessful) {
+                    val users = response.body()?.results ?: emptyList()
                     Result.Success(users.map {
                         UserEntity(
                             it.gender,
@@ -28,10 +28,10 @@ class DefaultUserRemoteDataSource @Inject constructor(private val userApiClient:
                             false
                         )
                     })
-                }else{
+                } else {
                     Result.Error(ApiResponseException(response.code()))
                 }
-            }catch (e:Exception){
+            } catch (e: Exception) {
                 Result.Error(e)
             }
         }

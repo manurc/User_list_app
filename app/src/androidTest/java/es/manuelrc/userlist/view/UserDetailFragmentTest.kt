@@ -28,7 +28,7 @@ import org.junit.Test
 import javax.inject.Singleton
 
 @HiltAndroidTest
-class UserDetailFragmentTest{
+class UserDetailFragmentTest {
 
 
     @get:Rule
@@ -43,9 +43,12 @@ class UserDetailFragmentTest{
         fun provideUserDetailViewModel(): UserDetailViewModel {
             val apiUser = mutableListOf(
                 User(
-                    "f", Name("user3","surname3"),Location(
+                    "f", Name("user3", "surname3"),
+                    Location(
                         Street(0L, ""),
-                        "", "", Coordinates("", "")),Dob("", 0L), "email3","phone3",
+                        "", "", Coordinates("", "")
+                    ),
+                    Dob("", 0L), "email3", "phone3",
                     Picture("", "", ""),
                 )
             )
@@ -60,7 +63,10 @@ class UserDetailFragmentTest{
             )
             val userDao = MockUserDao(localUsers.toMutableList())
             val userApiClient = MockUserApiClient(200, UsersResponse(apiUser))
-            val userRepository = DefaultUserRepository(DefaultUserRemoteDataSource(userApiClient), DefaultUserLocalDataSource(userDao))
+            val userRepository = DefaultUserRepository(
+                DefaultUserRemoteDataSource(userApiClient),
+                DefaultUserLocalDataSource(userDao)
+            )
             val userDetailInteractor = UserDetailsInteractor(userRepository)
             return UserDetailViewModel(userDetailInteractor)
         }

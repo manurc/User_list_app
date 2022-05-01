@@ -52,7 +52,7 @@ class DefaultUserRepository @Inject constructor(
         }
     }
 
-    override suspend fun saveUser(user: UserEntity){
+    override suspend fun saveUser(user: UserEntity) {
         coroutineScope {
             launch { userLocalDataSource.addNewUser(user) }
         }

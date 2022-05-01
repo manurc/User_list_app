@@ -81,7 +81,13 @@ class DefaultUserRepositoryTest : TestCase() {
         val fakeLocalDataStore = mutableListOf<UserEntity>()
         val user = listOf(mockk<UserEntity>())
         coEvery { userRemoteDataSource.getUsers(any()) } returns Result.Success(user)
-        coEvery { userLocalDataSource.addNewUser(any()) } coAnswers{ user.forEach { fakeLocalDataStore.add(it) }}
+        coEvery { userLocalDataSource.addNewUser(any()) } coAnswers {
+            user.forEach {
+                fakeLocalDataStore.add(
+                    it
+                )
+            }
+        }
         userRepository.addNewUsers(1)
         assert(fakeLocalDataStore.containsAll(user))
 

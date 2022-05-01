@@ -39,7 +39,7 @@ import javax.inject.Singleton
 
 @RunWith(AndroidJUnit4::class)
 @HiltAndroidTest
-class UserListFragmentTest{
+class UserListFragmentTest {
 
 
     @get:Rule
@@ -60,12 +60,15 @@ class UserListFragmentTest{
         fun provideUserListViewModel(): UserListViewModel {
             val apiUser = mutableListOf(
                 User(
-                    "f", Name("user3","surname3"),Location(
+                    "f", Name("user3", "surname3"),
+                    Location(
                         Street(0L, ""),
-                        "", "", Coordinates("", "")),Dob("", 0L), "email3","phone3",
+                        "", "", Coordinates("", "")
+                    ),
+                    Dob("", 0L), "email3", "phone3",
                     Picture("", "", ""),
-                    )
                 )
+            )
             val localUser = mutableListOf(
                 UserEntity(
                     "f", "user1", "surname1", "email1",
@@ -84,7 +87,10 @@ class UserListFragmentTest{
             )
             val userApiClient = MockUserApiClient(200, UsersResponse(apiUser))
             val userDao = MockUserDao(localUser)
-            val userRepository = DefaultUserRepository(DefaultUserRemoteDataSource(userApiClient), DefaultUserLocalDataSource(userDao))
+            val userRepository = DefaultUserRepository(
+                DefaultUserRemoteDataSource(userApiClient),
+                DefaultUserLocalDataSource(userDao)
+            )
             val userListInteractor = UserListInteractor(userRepository)
             return UserListViewModel(userListInteractor)
         }
@@ -95,7 +101,8 @@ class UserListFragmentTest{
 
         val bundle = Bundle()
         launchFragmentInHiltContainer<UserListFragment>(bundle, R.style.Theme_UserList)
-        Espresso.onView(withId(R.id.recyclerview)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        Espresso.onView(withId(R.id.recyclerview))
+            .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
         Espresso.onView(withId(R.id.recyclerview)).perform(
             RecyclerViewActions.actionOnItemAtPosition<UserListAdapter.ViewHolder>(
                 0,

@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupViewModels() {
         lifecycleScope.launch {
-            mSharedViewModel.locationPermission.collect{
+            mSharedViewModel.locationPermission.collect {
                 it.getContentIfNotHandled()?.let {
                     askPermissions()
                 }

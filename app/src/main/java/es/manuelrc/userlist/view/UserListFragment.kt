@@ -74,7 +74,7 @@ class UserListFragment : Fragment(), OnUserClickListener {
                     if (userList is Result.Success) {
                         mAdapter.submitList(userList.data)
                         if (userList.data.isEmpty()) mUserListViewModel.loadUsers()
-                    } else if (userList is Result.Error){
+                    } else if (userList is Result.Error) {
                         mUserListViewModel.errorLoading(userList.exception)
                     }
                 }
@@ -84,7 +84,8 @@ class UserListFragment : Fragment(), OnUserClickListener {
                     val msg = event.getContentIfNotHandled()
                     if (msg != null && event.peekContent() != 0) {
                         view?.let {
-                            if(msg == R.string.error_location) mBinding.cbDistance.isChecked= false
+                            if (msg == R.string.error_location) mBinding.cbDistance.isChecked =
+                                false
                             Snackbar.make(mBinding.root, getString(msg), Snackbar.LENGTH_SHORT)
                                 .show()
                         }
@@ -98,7 +99,7 @@ class UserListFragment : Fragment(), OnUserClickListener {
             }
             lifecycleScope.launch {
                 sortType.collect { event ->
-                    event.getContentIfNotHandled()?.let { order->
+                    event.getContentIfNotHandled()?.let { order ->
                         when (order) {
                             FilterConstrains.OrderedEnum.GENDER -> {
                                 mBinding.cbGender.isChecked = true

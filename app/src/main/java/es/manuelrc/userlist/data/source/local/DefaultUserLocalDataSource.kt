@@ -38,7 +38,7 @@ class DefaultUserLocalDataSource @Inject constructor(private val userDao: UserDa
     override suspend fun addNewUser(user: UserEntity) = withContext(Dispatchers.IO) {
         try {
             userDao.addUsers(user)
-        }catch (e: Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
             throw DBException(TypeError.INSERT)
         }
@@ -48,7 +48,7 @@ class DefaultUserLocalDataSource @Inject constructor(private val userDao: UserDa
     override suspend fun deleteUser(user: UserEntity) = withContext<Unit>(Dispatchers.IO) {
         try {
             userDao.deleteUser(user)
-        }catch (e: Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
             throw DBException(TypeError.DELETE)
         }
@@ -58,7 +58,7 @@ class DefaultUserLocalDataSource @Inject constructor(private val userDao: UserDa
     override suspend fun updateUser(user: UserEntity) = withContext<Unit>(Dispatchers.IO) {
         try {
             userDao.updateUser(user)
-        }catch (e: Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
             throw DBException(TypeError.UPDATE)
         }

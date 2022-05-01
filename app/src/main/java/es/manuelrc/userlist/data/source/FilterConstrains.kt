@@ -7,9 +7,10 @@ class FilterConstrains(
     var isFavorite: Boolean? = null,
     var isLocation: Boolean? = null,
     var currentLocation: Location? = null,
-    var query:String = ""
+    var query: String = ""
 ) {
-    fun copy():FilterConstrains= FilterConstrains(order,isFavorite,isLocation,currentLocation,query)
+    fun copy(): FilterConstrains =
+        FilterConstrains(order, isFavorite, isLocation, currentLocation, query)
 
     enum class OrderedEnum {
         NAME,

@@ -75,7 +75,7 @@ class UserListViewModel @Inject constructor(private val interactor: UserListInte
     fun errorLoading(exception: Exception) {
         var msg = R.string.unknown_error
         if (exception is DBException) {
-            msg = when(exception.type){
+            msg = when (exception.type) {
                 TypeError.GET -> R.string.error_obtaining_from_db
                 TypeError.INSERT -> R.string.error_inserting_to_db
                 TypeError.UPDATE -> R.string.error_updating_data_to_db

@@ -52,7 +52,8 @@ class UserListAdapter(private var listener: OnUserClickListener) :
             with(binding) {
                 imgPhoto.setOnClickListener {
                     imgPhoto.findNavController().navigate(
-                    UserListFragmentDirections.actionUserListFragmentToUserDetailFragment(user.email))
+                        UserListFragmentDirections.actionUserListFragmentToUserDetailFragment(user.email)
+                    )
                 }
                 cbFavorite.setOnClickListener { listener.onFavoriteUser(user) }
                 cbDelete.setOnClickListener { listener.onDeleteUser(user) }

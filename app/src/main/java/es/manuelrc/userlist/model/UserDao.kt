@@ -10,7 +10,7 @@ interface UserDao {
     fun getAllUsers(): Flow<List<UserEntity>>
 
     @Query("SELECT * FROM UserEntity where email like :email")
-    fun findUser(email:String): UserEntity?
+    fun findUser(email: String): UserEntity?
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun addUsers(vararg userEntity: UserEntity?)

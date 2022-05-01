@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class UserDetailFragment :Fragment() {
+class UserDetailFragment : Fragment() {
 
     @Inject
     lateinit var userDetailViewModel: UserDetailViewModel

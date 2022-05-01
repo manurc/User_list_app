@@ -14,13 +14,14 @@ import javax.inject.Inject
 
 class UserListInteractor @Inject constructor(private val userRepository: UserRepository) {
 
-    private val _filter: MutableStateFlow<FilterConstrains> = MutableStateFlow(FilterConstrains(FilterConstrains.OrderedEnum.NAME))
+    private val _filter: MutableStateFlow<FilterConstrains> =
+        MutableStateFlow(FilterConstrains(FilterConstrains.OrderedEnum.NAME))
 
     @ExperimentalCoroutinesApi
     val observeUsers = _filter.flatMapLatest { filter ->
-         userRepository.observeUsers().map { resultList ->
+        userRepository.observeUsers().map { resultList ->
             when (resultList) {
-                is Result.Success -> applyFilter(resultList.data,filter)
+                is Result.Success -> applyFilter(resultList.data, filter)
                 is Result.Error -> resultList
             }
         }
@@ -66,7 +67,10 @@ class UserListInteractor @Inject constructor(private val userRepository: UserRep
 
     }
 
-    private fun applyFilter(userList: List<UserEntity>, filter: FilterConstrains): Result.Success<List<UserEntity>> {
+    private fun applyFilter(
+        userList: List<UserEntity>,
+        filter: FilterConstrains
+    ): Result.Success<List<UserEntity>> {
 
         var filteredUserList = userList.sortedBy {
             when (filter.order) {

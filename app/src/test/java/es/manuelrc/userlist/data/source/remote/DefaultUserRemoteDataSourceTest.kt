@@ -20,7 +20,7 @@ import retrofit2.Response
 import java.lang.Exception
 
 @ExperimentalCoroutinesApi
-class DefaultUserRemoteDataSourceTest: TestCase() {
+class DefaultUserRemoteDataSourceTest : TestCase() {
 
     @MockK
     lateinit var userApiClient: UserApiClient
@@ -83,8 +83,10 @@ class DefaultUserRemoteDataSourceTest: TestCase() {
     @Test
     fun testGetUsersHttpError() = kotlinx.coroutines.test.runTest(dispatchTimeoutMs = 2_000) {
         val serviceError = "generic error"
-        val response = Response.error<UsersResponse>(400, Gson().toJson(serviceError)
-            .toResponseBody("application/json; charset=utf-8".toMediaType()))
+        val response = Response.error<UsersResponse>(
+            400, Gson().toJson(serviceError)
+                .toResponseBody("application/json; charset=utf-8".toMediaType())
+        )
         coEvery { userApiClient.getUsers(any()) } returns response
         val result = userRemoteDataSource.getUsers(1)
         assertNotNull(result)
@@ -92,12 +94,13 @@ class DefaultUserRemoteDataSourceTest: TestCase() {
     }
 
     @Test
-    fun testGetUsersGenericException() = kotlinx.coroutines.test.runTest(dispatchTimeoutMs = 2_000) {
-        val exception =  Exception()
-        coEvery { userApiClient.getUsers(any()) } throws exception
-        val result = userRemoteDataSource.getUsers(1)
-        assertNotNull(result)
-        assert(result is Result.Error && result.exception == exception)
-    }
+    fun testGetUsersGenericException() =
+        kotlinx.coroutines.test.runTest(dispatchTimeoutMs = 2_000) {
+            val exception = Exception()
+            coEvery { userApiClient.getUsers(any()) } throws exception
+            val result = userRemoteDataSource.getUsers(1)
+            assertNotNull(result)
+            assert(result is Result.Error && result.exception == exception)
+        }
 
 }

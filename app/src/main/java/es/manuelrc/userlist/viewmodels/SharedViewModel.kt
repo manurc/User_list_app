@@ -8,12 +8,12 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class SharedViewModel @Inject constructor(): ViewModel() {
+class SharedViewModel @Inject constructor() : ViewModel() {
 
     private val _locationPermission = MutableStateFlow(Event(false))
     val locationPermission: StateFlow<Event<Boolean>> get() = _locationPermission
 
-    fun askLocation(){
+    fun askLocation() {
         _locationPermission.value = Event(true)
     }
 
