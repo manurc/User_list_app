@@ -58,36 +58,24 @@ dependencies {
     kapt 'com.google.dagger:hilt-android-compiler:2.41'
     implementation 'androidx.room:room-runtime:2.4.2'
     implementation 'androidx.room:room-ktx:2.4.2'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     kapt "androidx.room:room-compiler:2.4.2"
     implementation 'com.github.bumptech.glide:glide:4.13.0'
     kapt 'com.github.bumptech.glide:compiler:4.11.0'
     implementation 'com.google.android.gms:play-services-location:19.0.1'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.4.2'
     implementation 'androidx.navigation:navigation-ui-ktx:2.4.2'
-    implementation("androidx.security:security-crypto:1.0.0")
+
 
 
     // Dependencies for local unit tests
     testImplementation 'junit:junit:4.13.2'
-    testImplementation 'org.mockito:mockito-core:4.4.0'
-    testImplementation 'org.mockito.kotlin:mockito-kotlin:4.0.0'
-    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0'
     testImplementation 'io.mockk:mockk:1.12.3'
     testImplementation 'org.json:json:20220320'
-    testImplementation 'com.google.dagger:hilt-android-testing:2.39'
     testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.2'
-    testImplementation 'androidx.arch.core:core-testing:2.1.0'
-    kaptTest 'com.google.dagger:hilt-android-compiler:2.41'
 
     //AndroidX Test - JVM testing
     debugImplementation 'androidx.fragment:fragment-testing:1.4.1'
-    debugImplementation 'androidx.fragment:fragment-ktx:1.4.1'
-    debugImplementation 'androidx.test:core:1.4.0'
-    debugImplementation 'androidx.test:rules:1.4.0'
-    debugImplementation 'androidx.test:runner:1.4.0'
     debugImplementation 'org.mockito:mockito-core:4.4.0'
-    debugImplementation 'org.mockito.kotlin:mockito-kotlin:4.0.0'
     debugImplementation 'org.mockito:mockito-android:4.4.0'
 
     // AndroidX Test - Instrumented testing
@@ -96,9 +84,6 @@ dependencies {
     androidTestImplementation 'com.google.dagger:hilt-android-testing:2.39'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.3.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.4.0'
     androidTestImplementation 'androidx.test.espresso:espresso-accessibility:3.3.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-web:3.4.0'
-    androidTestImplementation 'androidx.test.espresso.idling:idling-concurrent:3.4.0'
     kaptAndroidTest 'com.google.dagger:hilt-android-compiler:2.41'
 }

@@ -10,6 +10,7 @@ import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
 import io.mockk.unmockkAll
 import junit.framework.TestCase
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.ResponseBody.Companion.toResponseBody
 import org.junit.After
@@ -18,6 +19,7 @@ import org.junit.Test
 import retrofit2.Response
 import java.lang.Exception
 
+@ExperimentalCoroutinesApi
 class DefaultUserRemoteDataSourceTest: TestCase() {
 
     @MockK

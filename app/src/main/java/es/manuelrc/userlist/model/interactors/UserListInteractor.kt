@@ -7,6 +7,7 @@ import es.manuelrc.userlist.data.source.UserRepository
 import es.manuelrc.userlist.model.UserEntity
 import es.manuelrc.userlist.view.utils.DistanceUtil
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -15,6 +16,7 @@ class UserListInteractor @Inject constructor(private val userRepository: UserRep
 
     private val _filter: MutableStateFlow<FilterConstrains> = MutableStateFlow(FilterConstrains(FilterConstrains.OrderedEnum.NAME))
 
+    @ExperimentalCoroutinesApi
     val observeUsers = _filter.flatMapLatest { filter ->
          userRepository.observeUsers().map { resultList ->
             when (resultList) {

@@ -13,12 +13,14 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import io.mockk.unmockkAll
 import junit.framework.TestCase
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.*
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 
+@ExperimentalCoroutinesApi
 class DefaultUserRepositoryTest : TestCase() {
 
     @MockK
