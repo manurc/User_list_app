@@ -98,9 +98,7 @@ class UserListViewModel @Inject constructor(private val interactor: UserListInte
         if (currentLocation == null) {
             errorLoading(DBException(TypeError.LOCATION_NULL))
         }
-        executeAction {
-            interactor.updateFilter(order, isFavorite, isLocation, currentLocation, query)
-        }
+        interactor.updateFilter(order, isFavorite, isLocation, currentLocation, query)
     }
 
     private fun executeAction(block: suspend () -> Unit): Job {

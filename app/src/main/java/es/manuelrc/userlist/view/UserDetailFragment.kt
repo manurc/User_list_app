@@ -12,6 +12,7 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import es.manuelrc.userlist.R
 import es.manuelrc.userlist.databinding.FragmentUserDetailsBinding
+import es.manuelrc.userlist.view.utils.UserPrinter
 import es.manuelrc.userlist.viewmodels.UserDetailViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -42,6 +43,7 @@ class UserDetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         mBinding.lifecycleOwner = viewLifecycleOwner
         mBinding.userDetailViewModel = userDetailViewModel
+        mBinding.userPrinter = UserPrinter
         setupViewModel()
     }
 

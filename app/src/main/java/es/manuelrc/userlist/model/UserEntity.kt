@@ -17,9 +17,4 @@ class UserEntity(
     val location: Location,
     val registered: Dob,
     var isFavorite: Boolean = false
-) {
-
-    fun getFullName(): String {
-        return "$name $surname"
-    }
-}
+)

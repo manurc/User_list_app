@@ -15,6 +15,7 @@ import es.manuelrc.userlist.R
 import es.manuelrc.userlist.databinding.ItemUserBinding
 import es.manuelrc.userlist.model.UserEntity
 import es.manuelrc.userlist.view.UserListFragmentDirections
+import es.manuelrc.userlist.view.utils.UserPrinter
 
 class UserListAdapter(private var listener: OnUserClickListener) :
     ListAdapter<UserEntity, RecyclerView.ViewHolder>(UserDiffCallback()) {
@@ -33,7 +34,7 @@ class UserListAdapter(private var listener: OnUserClickListener) :
         with(holder as ViewHolder) {
             setListener(user)
             binding.apply {
-                tvName.text = user.getFullName()
+                tvName.text = UserPrinter.printUserFullName(user)
                 tvEmail.text = user.email
                 tvPhone.text = user.phone
                 cbFavorite.isChecked = user.isFavorite

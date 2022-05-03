@@ -72,7 +72,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:padding="@dimen/common_padding_min"
-            android:text="@{userDetailViewModel.userSelected.fullName}"
+            android:text="@{userPrinter.printUserFullName(userDetailViewModel.userSelected)}"
             android:textAppearance="?attr/textAppearanceBody2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/tvName1"
@@ -154,6 +154,10 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <data>
+
+        <variable
+            name="userPrinter"
+            type="es.manuelrc.userlist.view.utils.UserPrinter" />
 
         <variable
             name="userDetailViewModel"
