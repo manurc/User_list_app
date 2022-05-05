@@ -1,36 +1,22 @@
 package es.manuelrc.userlist.model.interactors
 
 import android.location.Location
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.asFlow
-import androidx.lifecycle.liveData
-import androidx.lifecycle.switchMap
-import com.google.android.gms.common.server.response.SafeParcelResponse.from
 import es.manuelrc.userlist.data.Result
 import es.manuelrc.userlist.data.source.FilterConstrains
 import es.manuelrc.userlist.data.source.UserRepository
 import es.manuelrc.userlist.model.UserEntity
 import es.manuelrc.userlist.view.utils.DistanceUtil
 import io.reactivex.Observable
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.subjects.BehaviorSubject
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
-import java.util.Date.from
 import javax.inject.Inject
-import kotlin.properties.Delegates
-import kotlin.properties.ObservableProperty
 
 class UserListInteractor @Inject constructor(private val userRepository: UserRepository) {
 
 
-    private val _filter = FilterConstrains(FilterConstrains.OrderedEnum.NAME)
-
-    private val filter = VariableObservable(_filter)
+    private val filter = BehaviorSubject.createDefault(FilterConstrains(FilterConstrains.OrderedEnum.NAME))
 
     var observeUsers: Observable<Result.Success<List<UserEntity>>> =
-        filter.observable.switchMap { filter ->
+        filter.switchMap { filter ->
             userRepository.observeUsers().map { resultList ->
                 applyFilter(resultList.data, filter)
             }
@@ -38,8 +24,8 @@ class UserListInteractor @Inject constructor(private val userRepository: UserRep
 
 
     suspend fun loadUsers() {
-        if ((_filter.isFavorite == false || _filter.isFavorite == null) &&
-            (_filter.isLocation == false || _filter.isLocation == null)
+        if ((filter.value?.isFavorite == false || filter.value?.isFavorite == null) &&
+            (filter.value?.isLocation == false || filter.value?.isLocation == null)
         )
             userRepository.addNewUsers(5)
     }
@@ -65,13 +51,14 @@ class UserListInteractor @Inject constructor(private val userRepository: UserRep
         location: Location?,
         query: String?
     ) {
-        _filter.apply {
-            if (order != null) this.order = order
-            if (isFavorite != null) this.isFavorite = isFavorite
-            if (isLocation != null) this.isLocation = isLocation
-            if (location != null) this.currentLocation = location
-            if (query != null) this.query = query
-            filter.value = this
+        filter.apply {
+            if (order != null) this.value?.order = order
+            if (isFavorite != null) this.value?.isFavorite = isFavorite
+            if (isLocation != null) this.value?.isLocation = isLocation
+            if (location != null) this.value?.currentLocation = location
+            if (query != null) this.value?.query = query
+            if(this.value!=null)
+            filter.onNext(this.blockingFirst())
         }
 
 

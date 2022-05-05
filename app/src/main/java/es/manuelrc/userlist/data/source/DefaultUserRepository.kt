@@ -5,12 +5,6 @@ import es.manuelrc.userlist.data.source.local.UserLocalDataSource
 import es.manuelrc.userlist.data.source.remote.UserRemoteDataSource
 import es.manuelrc.userlist.model.UserEntity
 import io.reactivex.Observable
-import io.reactivex.Single
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class DefaultUserRepository @Inject constructor(

@@ -3,7 +3,6 @@ package es.manuelrc.userlist.model
 import androidx.room.*
 import io.reactivex.Flowable
 import io.reactivex.Single
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface UserDao {

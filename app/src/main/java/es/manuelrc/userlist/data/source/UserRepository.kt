@@ -3,8 +3,6 @@ package es.manuelrc.userlist.data.source
 import es.manuelrc.userlist.data.Result
 import es.manuelrc.userlist.model.UserEntity
 import io.reactivex.Observable
-import io.reactivex.Single
-import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {
 

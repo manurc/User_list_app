@@ -14,7 +14,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import es.manuelrc.userlist.R
 import es.manuelrc.userlist.adapters.OnUserClickListener
 import es.manuelrc.userlist.adapters.UserListAdapter
-import es.manuelrc.userlist.data.Result
 import es.manuelrc.userlist.data.source.FilterConstrains
 import es.manuelrc.userlist.databinding.FragmentUserListBinding
 import es.manuelrc.userlist.model.UserEntity

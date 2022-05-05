@@ -76,7 +76,7 @@ class UserListViewModel @Inject constructor(private val interactor: UserListInte
         this.currentLocation = location
     }
 
-    fun errorLoading(exception: Exception) {
+    private fun errorLoading(exception: Exception) {
         var msg = R.string.unknown_error
         if (exception is DBException) {
             msg = when (exception.type) {
@@ -99,7 +99,7 @@ class UserListViewModel @Inject constructor(private val interactor: UserListInte
         if (order != null) {
             _sortType.value = Event(order)
         }
-        if (currentLocation == null) {
+        if (currentLocation == null && isLocation != null && isLocation) {
             errorLoading(DBException(TypeError.LOCATION_NULL))
         }
         executeAction {

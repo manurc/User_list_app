@@ -1,17 +1,10 @@
 package es.manuelrc.userlist.data.source.local
 
-import android.util.Log
 import es.manuelrc.userlist.data.Result
 import es.manuelrc.userlist.model.UserDao
 import es.manuelrc.userlist.model.UserEntity
 import es.manuelrc.userlist.model.exceptions.TypeError
 import io.reactivex.Observable
-import io.reactivex.Single
-import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class DefaultUserLocalDataSource @Inject constructor(private val userDao: UserDao) :
@@ -19,7 +12,7 @@ class DefaultUserLocalDataSource @Inject constructor(private val userDao: UserDa
 
 
     override fun observeUsers(): Observable<Result.Success<List<UserEntity>>> =
-         userDao.getAllUsers().filter { it.isNotEmpty() }.map { userList ->
+         userDao.getAllUsers().map { userList ->
             Result.Success(userList)
         }.toObservable()
 
