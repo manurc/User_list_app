@@ -4,6 +4,8 @@ import es.manuelrc.userlist.data.Result
 import es.manuelrc.userlist.data.source.local.UserLocalDataSource
 import es.manuelrc.userlist.data.source.remote.UserRemoteDataSource
 import es.manuelrc.userlist.model.UserEntity
+import io.reactivex.Observable
+import io.reactivex.Single
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -17,11 +19,11 @@ class DefaultUserRepository @Inject constructor(
 ) : UserRepository {
 
 
-    override fun observeUsers(): Flow<Result<List<UserEntity>>> {
+    override fun observeUsers(): Observable<Result.Success<List<UserEntity>>> {
         return userLocalDataSource.observeUsers()
     }
 
-    override suspend fun getUser(userEmail: String): Result<UserEntity> {
+    override fun getUser(userEmail: String): Result<UserEntity> {
         return userLocalDataSource.getUser(userEmail)
     }
 
@@ -36,25 +38,23 @@ class DefaultUserRepository @Inject constructor(
         }
     }
 
-    override suspend fun deleteUser(user: UserEntity) {
-        withContext(Dispatchers.IO) {
-            coroutineScope {
-                launch { userLocalDataSource.deleteUser(user) }
-            }
-        }
+    override fun deleteUser(user: UserEntity) {
+
+
+        userLocalDataSource.deleteUser(user)
+
+
     }
 
-    override suspend fun updateUser(user: UserEntity) {
-        withContext(Dispatchers.IO) {
-            coroutineScope {
-                launch { userLocalDataSource.updateUser(user) }
-            }
-        }
+    override fun updateUser(user: UserEntity) {
+
+        userLocalDataSource.updateUser(user)
+
     }
 
-    override suspend fun saveUser(user: UserEntity) {
-        coroutineScope {
-            launch { userLocalDataSource.addNewUser(user) }
-        }
+    override fun saveUser(user: UserEntity) {
+
+        userLocalDataSource.addNewUser(user)
+
     }
 }

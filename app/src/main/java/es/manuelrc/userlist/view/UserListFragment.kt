@@ -20,6 +20,8 @@ import es.manuelrc.userlist.databinding.FragmentUserListBinding
 import es.manuelrc.userlist.model.UserEntity
 import es.manuelrc.userlist.viewmodels.SharedViewModel
 import es.manuelrc.userlist.viewmodels.UserListViewModel
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -70,14 +72,13 @@ class UserListFragment : Fragment(), OnUserClickListener {
     private fun setupViewModel() {
         with(mUserListViewModel) {
             lifecycleScope.launch {
-                mUsers.collect { userList ->
-                    if (userList is Result.Success) {
-                        mAdapter.submitList(userList.data)
-                        if (userList.data.isEmpty()) mUserListViewModel.loadUsers()
-                    } else if (userList is Result.Error) {
-                        mUserListViewModel.errorLoading(userList.exception)
+                mUsers
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe {
+                        mAdapter.submitList(it.data)
+                        if (it.data.isEmpty()) mUserListViewModel.loadUsers()
                     }
-                }
             }
             lifecycleScope.launch {
                 snackbarMessage.collect { event ->

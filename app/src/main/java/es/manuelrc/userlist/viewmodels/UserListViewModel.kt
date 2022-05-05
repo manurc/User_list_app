@@ -5,6 +5,7 @@ import android.location.Location
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import es.manuelrc.userlist.R
+import es.manuelrc.userlist.data.Result
 import es.manuelrc.userlist.data.source.FilterConstrains
 import es.manuelrc.userlist.data.source.local.DBException
 import es.manuelrc.userlist.data.source.remote.ApiResponseException
@@ -12,6 +13,7 @@ import es.manuelrc.userlist.model.UserEntity
 import es.manuelrc.userlist.model.exceptions.TypeError
 import es.manuelrc.userlist.model.interactors.UserListInteractor
 import es.manuelrc.userlist.view.utils.Event
+import io.reactivex.Observable
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -22,7 +24,9 @@ import javax.inject.Singleton
 class UserListViewModel @Inject constructor(private val interactor: UserListInteractor) :
     ViewModel() {
 
-    val mUsers = interactor.observeUsers
+
+    val mUsers: Observable<Result.Success<List<UserEntity>>> = interactor.observeUsers
+
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> get() = _isLoading
     private val _sortType = MutableStateFlow(Event(FilterConstrains.OrderedEnum.NAME))

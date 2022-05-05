@@ -2,20 +2,22 @@ package es.manuelrc.userlist.data.source
 
 import es.manuelrc.userlist.data.Result
 import es.manuelrc.userlist.model.UserEntity
+import io.reactivex.Observable
+import io.reactivex.Single
 import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {
 
-    fun observeUsers(): Flow<Result<List<UserEntity>>>
+    fun observeUsers(): Observable<Result.Success<List<UserEntity>>>
 
-    suspend fun getUser(userEmail: String): Result<UserEntity>
+    fun getUser(userEmail: String): Result<UserEntity>
 
     suspend fun addNewUsers(amount: Int)
 
-    suspend fun deleteUser(user: UserEntity)
+    fun deleteUser(user: UserEntity)
 
-    suspend fun updateUser(user: UserEntity)
+    fun updateUser(user: UserEntity)
 
-    suspend fun saveUser(user: UserEntity)
+    fun saveUser(user: UserEntity)
 
 }

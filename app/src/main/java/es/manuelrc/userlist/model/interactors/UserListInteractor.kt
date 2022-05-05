@@ -1,35 +1,40 @@
 package es.manuelrc.userlist.model.interactors
 
 import android.location.Location
+import androidx.lifecycle.MutableLiveData
+import com.google.android.gms.common.server.response.SafeParcelResponse.from
 import es.manuelrc.userlist.data.Result
 import es.manuelrc.userlist.data.source.FilterConstrains
 import es.manuelrc.userlist.data.source.UserRepository
 import es.manuelrc.userlist.model.UserEntity
 import es.manuelrc.userlist.view.utils.DistanceUtil
+import io.reactivex.Observable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.withContext
+import java.util.Date.from
 import javax.inject.Inject
 
 class UserListInteractor @Inject constructor(private val userRepository: UserRepository) {
 
-    private val _filter: MutableStateFlow<FilterConstrains> =
-        MutableStateFlow(FilterConstrains(FilterConstrains.OrderedEnum.NAME))
+    private val _filter: MutableLiveData<FilterConstrains> =
+        MutableLiveData(FilterConstrains(FilterConstrains.OrderedEnum.NAME))
 
-    @ExperimentalCoroutinesApi
-    val observeUsers = _filter.flatMapLatest { filter ->
+
+    val observeUsers = Observable.just(_filter).flatMap { filter ->
         userRepository.observeUsers().map { resultList ->
-            when (resultList) {
-                is Result.Success -> applyFilter(resultList.data, filter)
-                is Result.Error -> resultList
-            }
+                applyFilter(resultList.data, filter.value!!)
         }
-    }.distinctUntilChanged()
+    }
+
+//    val observeUsers: Observable<Result.Success<List<UserEntity>>> = userRepository.observeUsers().map { resultList ->
+//        applyFilter(resultList.data, _filter.value)
+//    }
 
     suspend fun loadUsers() {
-        if ((_filter.value.isFavorite == false || _filter.value.isFavorite == null) &&
-            (_filter.value.isLocation == false || _filter.value.isLocation == null)
+        if ((_filter.value?.isFavorite == false || _filter.value?.isFavorite == null) &&
+            (_filter.value?.isLocation == false || _filter.value?.isLocation == null)
         )
             userRepository.addNewUsers(5)
     }
@@ -39,11 +44,11 @@ class UserListInteractor @Inject constructor(private val userRepository: UserRep
         callback()
     }
 
-    suspend fun deleteUsers(user: UserEntity) {
+    fun deleteUsers(user: UserEntity) {
         userRepository.deleteUser(user)
     }
 
-    suspend fun updateUsers(user: UserEntity) = withContext(Dispatchers.IO) {
+    fun updateUsers(user: UserEntity) {
         user.isFavorite = !user.isFavorite
         userRepository.updateUser(user)
     }
@@ -55,8 +60,8 @@ class UserListInteractor @Inject constructor(private val userRepository: UserRep
         location: Location?,
         query: String?
     ) {
-        val filter = _filter.value.copy()
-        filter.apply {
+        val filter = _filter.value?.copy()
+        filter?.apply {
             if (order != null) this.order = order
             if (isFavorite != null) this.isFavorite = isFavorite
             if (isLocation != null) this.isLocation = isLocation
