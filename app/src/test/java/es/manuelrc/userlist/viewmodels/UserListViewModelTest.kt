@@ -1,6 +1,5 @@
 package es.manuelrc.userlist.viewmodels
 
-import es.manuelrc.userlist.R
 import es.manuelrc.userlist.data.Result
 import es.manuelrc.userlist.data.source.FilterConstrains
 import es.manuelrc.userlist.data.source.remote.dto.inner.*
@@ -8,10 +7,10 @@ import es.manuelrc.userlist.model.UserEntity
 import es.manuelrc.userlist.model.interactors.UserListInteractor
 import io.mockk.*
 import io.mockk.impl.annotations.MockK
+import io.reactivex.Observable
 import junit.framework.TestCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
@@ -36,15 +35,7 @@ class UserListViewModelTest : TestCase() {
         MockKAnnotations.init(this)
         Dispatchers.setMain(Dispatchers.Unconfined)
         apiUsersList = mutableListOf()
-        coEvery { userListInteractor.observeUsers } answers {
-            flow {
-                emit(
-                    Result.Success(
-                        apiUsersList
-                    )
-                )
-            }
-        }
+        coEvery { userListInteractor.observeUsers } answers { Observable.fromArray( Result.Success(apiUsersList)) }
         userListViewModel = UserListViewModel(userListInteractor)
     }
 
@@ -58,7 +49,7 @@ class UserListViewModelTest : TestCase() {
     fun testLoadUserEmptyDB() = runBlocking {
         coEvery { userListInteractor.loadUsers() } answers {}
         userListViewModel.loadUsers()
-        val users = userListViewModel.mUsers.last()
+        val users = userListViewModel.mUsers.blockingLast()
         assert(users is Result.Success && users.data.isEmpty())
 
     }
@@ -69,7 +60,7 @@ class UserListViewModelTest : TestCase() {
         apiUsersList.add(user)
         coEvery { userListInteractor.loadUsers() } answers {}
         userListViewModel.loadUsers()
-        val users = userListViewModel.mUsers.last()
+        val users = userListViewModel.mUsers.blockingLast()
         assert(users is Result.Success && users.data.isNotEmpty() && users.data.contains(user))
 
     }
@@ -80,7 +71,7 @@ class UserListViewModelTest : TestCase() {
         apiUsersList.add(user)
         coEvery { userListInteractor.deleteUsers(any()) } answers { apiUsersList.remove(user) }
         userListViewModel.deleteUser(user)
-        val users = userListViewModel.mUsers.last()
+        val users = userListViewModel.mUsers.blockingLast()
         assert(users is Result.Success && users.data.isEmpty())
 
     }
@@ -99,7 +90,7 @@ class UserListViewModelTest : TestCase() {
             apiUsersList.find { it == user }?.isFavorite = true
         }
         userListViewModel.updateUser(user)
-        val users = userListViewModel.mUsers.last()
+        val users = userListViewModel.mUsers.blockingLast()
         assert(users is Result.Success && users.data.isNotEmpty() && users.data[0].isFavorite)
 
     }
@@ -109,7 +100,7 @@ class UserListViewModelTest : TestCase() {
         val user = mockk<UserEntity>()
         coEvery { userListInteractor.addNewUser(any()) } answers { apiUsersList.add(user) }
         userListViewModel.addUser()
-        val users = userListViewModel.mUsers.last()
+        val users = userListViewModel.mUsers.blockingLast()
         assert(users is Result.Success && users.data.isNotEmpty() && users.data[0] == user)
 
     }
@@ -137,14 +128,12 @@ class UserListViewModelTest : TestCase() {
                 any(), any(), any(),
                 any(), any()
             )
-        } answers { apiUsersList = apiUsersList.filter { it.isFavorite }.toMutableList() }
+        } answers { apiUsersList.removeAll(apiUsersList.filter { !it.isFavorite }.toMutableList())  }
         userListViewModel.filterUsers(FilterConstrains.OrderedEnum.GENDER, isFavorite = true)
-        val users = userListViewModel.mUsers.last()
+        val users = userListViewModel.mUsers.blockingLast()
         val sortType = userListViewModel.sortType.value
-        val snackbarMessage = userListViewModel.snackbarMessage.value
         assert(users is Result.Success && users.data.isNotEmpty() && users.data.all { it.isFavorite }
-                && sortType.peekContent() == FilterConstrains.OrderedEnum.GENDER &&
-                snackbarMessage.peekContent() == R.string.error_location)
+                && sortType.peekContent() == FilterConstrains.OrderedEnum.GENDER)
 
     }
 
