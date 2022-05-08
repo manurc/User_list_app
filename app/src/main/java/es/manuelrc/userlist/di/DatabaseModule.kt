@@ -19,8 +19,8 @@ class DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideRandomAppDatabase(@ApplicationContext appContext: Context?): RandomAppDatabase =
-        Room.databaseBuilder(appContext!!, RandomAppDatabase::class.java, "myDB")
+    fun provideRandomAppDatabase(@ApplicationContext appContext: Context): RandomAppDatabase =
+        Room.databaseBuilder(appContext, RandomAppDatabase::class.java, "myDB")
             .allowMainThreadQueries().fallbackToDestructiveMigration().build()
 
 }
