@@ -6,31 +6,31 @@ import es.manuelrc.userlist.data.Result
 import es.manuelrc.userlist.model.UserEntity
 import es.manuelrc.userlist.model.interactors.UserDetailsInteractor
 import es.manuelrc.userlist.view.utils.Event
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import io.reactivex.subjects.BehaviorSubject
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class UserDetailViewModel @Inject constructor(private val interactor: UserDetailsInteractor) :
     ViewModel() {
 
+    private val _snackbarText = BehaviorSubject.createDefault(Event(0))
+    val snackbarMessage: BehaviorSubject<Event<Int>> = _snackbarText
+    private val _isLoading = BehaviorSubject.createDefault(false)
+    val isLoading: BehaviorSubject<Boolean> get() = _isLoading
+    var userSelected = BehaviorSubject.create<UserEntity>()
+//    val userSelected: BehaviorSubject<UserEntity?> get() = _userSelected
 
-    private val _snackbarText = MutableStateFlow(Event(0))
-    val snackbarMessage: StateFlow<Event<Int>> = _snackbarText
-    private val _isLoading = MutableStateFlow(false)
-    val isLoading: StateFlow<Boolean> get() = _isLoading
-    private var _userSelected: MutableStateFlow<UserEntity?> = MutableStateFlow(null)
-    val userSelected: StateFlow<UserEntity?> get() = _userSelected
-
-    suspend fun findUser(userIdentifier: String) {
-        _isLoading.value = true
+    suspend fun findUser(userIdentifier: String) = withContext(Dispatchers.IO) {
+        _isLoading.onNext(true)
         val user = interactor.findUser(userIdentifier)
         if (user is Result.Success) {
             user.data.let {
-                _userSelected.value = it
+                userSelected.onNext(it)
             }
         } else if (user is Result.Error) {
-            _snackbarText.value = Event(R.string.error_obtaining_from_db)
+            _snackbarText.onNext(Event(R.string.error_obtaining_from_db))
         }
-        _isLoading.value = false
+        _isLoading.onNext(false)
     }
 }

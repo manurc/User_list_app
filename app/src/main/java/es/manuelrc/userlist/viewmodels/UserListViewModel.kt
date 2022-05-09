@@ -14,9 +14,8 @@ import es.manuelrc.userlist.model.exceptions.TypeError
 import es.manuelrc.userlist.model.interactors.UserListInteractor
 import es.manuelrc.userlist.view.utils.Event
 import io.reactivex.Observable
+import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -27,13 +26,13 @@ class UserListViewModel @Inject constructor(private val interactor: UserListInte
 
     val mUsers: Observable<Result.Success<List<UserEntity>>> = interactor.observeUsers
 
-    private val _isLoading = MutableStateFlow(false)
-    val isLoading: StateFlow<Boolean> get() = _isLoading
-    private val _sortType = MutableStateFlow(Event(FilterConstrains.OrderedEnum.NAME))
-    val sortType: StateFlow<Event<FilterConstrains.OrderedEnum>> get() = _sortType
+    private val _isLoading = BehaviorSubject.createDefault(false)
+    val isLoading: Observable<Boolean> get() = _isLoading
+    private val _sortType = BehaviorSubject.createDefault(Event(FilterConstrains.OrderedEnum.NAME))
+    val sortType: Observable<Event<FilterConstrains.OrderedEnum>> get() = _sortType
     private var currentLocation: Location? = null
-    private val _snackbarText = MutableStateFlow(Event(0))
-    val snackbarMessage: StateFlow<Event<Int>> = _snackbarText
+    private val _snackbarText = BehaviorSubject.createDefault(Event(0))
+    val snackbarMessage: Observable<Event<Int>> = _snackbarText
 
     private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
         CoroutineScope(Dispatchers.Main).launch {
@@ -42,7 +41,7 @@ class UserListViewModel @Inject constructor(private val interactor: UserListInte
             if (throwable.cause is ApiResponseException) {
                 msg = R.string.error_downloading_users
             }
-            _snackbarText.value = Event(msg)
+            _snackbarText.onNext(Event(msg))
         }
     }
 
@@ -67,7 +66,7 @@ class UserListViewModel @Inject constructor(private val interactor: UserListInte
     fun addUser() {
         executeAction {
             interactor.addNewUser {
-                _snackbarText.value = Event(R.string.user_added)
+                _snackbarText.onNext(Event(R.string.user_added))
             }
         }
     }
@@ -87,7 +86,7 @@ class UserListViewModel @Inject constructor(private val interactor: UserListInte
                 TypeError.LOCATION_NULL -> R.string.error_location
             }
         }
-        _snackbarText.value = Event(msg)
+        _snackbarText.onNext(Event(msg))
     }
 
     fun filterUsers(
@@ -97,7 +96,7 @@ class UserListViewModel @Inject constructor(private val interactor: UserListInte
         query: String? = null,
     ) {
         if (order != null) {
-            _sortType.value = Event(order)
+            _sortType.onNext(Event(order))
         }
         if (currentLocation == null && isLocation != null && isLocation) {
             errorLoading(DBException(TypeError.LOCATION_NULL))
@@ -109,11 +108,11 @@ class UserListViewModel @Inject constructor(private val interactor: UserListInte
 
     private fun executeAction(block: suspend () -> Unit): Job {
         return viewModelScope.launch(exceptionHandler) {
-            _isLoading.value = true
+            _isLoading.onNext(true)
             try {
                 block()
             } finally {
-                _isLoading.value = false
+                _isLoading.onNext(false)
             }
         }
     }

@@ -3,7 +3,6 @@ package es.manuelrc.userlist.view.utils
 class Event<out T>(private val content: T) {
 
     private var hasBeenHandled = false
-        private set
 
 
     fun getContentIfNotHandled(): T? {

@@ -18,7 +18,8 @@
             app:layout_constraintDimensionRatio="H, 1:1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:loadImage="@{userDetailViewModel.userSelected.picture.large}" />
+            app:loadImage="@{userDetailViewModel.userSelected}" />
+
 
         <ProgressBar
             android:id="@+id/progress_bar"
@@ -48,11 +49,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:padding="@dimen/common_padding_min"
-            android:text="@{userDetailViewModel.userSelected.gender}"
             android:textAppearance="?attr/textAppearanceBody2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/tvGender1"
             app:layout_constraintTop_toBottomOf="@+id/imgPhoto"
+            app:rxText="@{userDetailViewModel.userSelected}"
+            app:rxEnum="@{userDetailsEnum.GENDER}"
             tools:text="female" />
 
 
@@ -72,11 +74,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:padding="@dimen/common_padding_min"
-            android:text="@{userPrinter.printUserFullName(userDetailViewModel.userSelected)}"
             android:textAppearance="?attr/textAppearanceBody2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/tvName1"
             app:layout_constraintTop_toBottomOf="@+id/tvGender1"
+            app:rxText="@{userDetailViewModel.userSelected}"
+            app:rxEnum="@{userDetailsEnum.NAME}"
             tools:text="name surname" />
 
 
@@ -96,11 +99,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:padding="@dimen/common_padding_min"
-            android:text="@{userDetailViewModel.userSelected.location.toString()}"
             android:textAppearance="?attr/textAppearanceBody2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/tvLocation1"
             app:layout_constraintTop_toBottomOf="@+id/tvName1"
+            app:rxText="@{userDetailViewModel.userSelected}"
+            app:rxEnum="@{userDetailsEnum.LOCATION}"
             tools:text="Street city state" />
 
 
@@ -120,11 +124,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:padding="@dimen/common_padding_min"
-            android:text="@{userDetailViewModel.userSelected.registered.date}"
             android:textAppearance="?attr/textAppearanceBody2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/tvRegistered1"
             app:layout_constraintTop_toBottomOf="@+id/tvLocation2"
+            app:rxText="@{userDetailViewModel.userSelected}"
+            app:rxEnum="@{userDetailsEnum.DATE}"
             tools:text="2017-08-09" />
 
 
@@ -144,20 +149,20 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:padding="@dimen/common_padding_min"
-            android:text="@{userDetailViewModel.userSelected.email}"
             android:textAppearance="?attr/textAppearanceBody2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/tvEmail1"
             app:layout_constraintTop_toBottomOf="@+id/tvRegistered1"
+            app:rxText="@{userDetailViewModel.userSelected}"
+            app:rxEnum="@{userDetailsEnum.EMAIL}"
             tools:text="user@gmail.com" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <data>
-
         <variable
-            name="userPrinter"
-            type="es.manuelrc.userlist.view.utils.UserPrinter" />
+            name="userDetailsEnum"
+            type="es.manuelrc.userlist.view.utils.UserDetailsEnum" />
         <variable
             name="userDetailViewModel"
             type="es.manuelrc.userlist.viewmodels.UserDetailViewModel" />

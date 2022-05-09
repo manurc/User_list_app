@@ -12,8 +12,9 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import es.manuelrc.userlist.R
 import es.manuelrc.userlist.databinding.FragmentUserDetailsBinding
-import es.manuelrc.userlist.view.utils.UserPrinter
 import es.manuelrc.userlist.viewmodels.UserDetailViewModel
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -43,7 +44,6 @@ class UserDetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         mBinding.lifecycleOwner = viewLifecycleOwner
         mBinding.userDetailViewModel = userDetailViewModel
-        mBinding.userPrinter = UserPrinter
         setupViewModel()
     }
 
@@ -56,15 +56,18 @@ class UserDetailFragment : Fragment() {
             }
         }
         lifecycleScope.launch {
-            userDetailViewModel.snackbarMessage.collect { event ->
-                val msg = event.getContentIfNotHandled()
-                if (msg != null && event.peekContent() != 0) {
-                    view?.let {
-                        Snackbar.make(mBinding.root, getString(msg), Snackbar.LENGTH_SHORT)
-                            .show()
+            userDetailViewModel.snackbarMessage
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { event ->
+                    val msg = event.getContentIfNotHandled()
+                    if (msg != null && event.peekContent() != 0) {
+                        view?.let {
+                            Snackbar.make(mBinding.root, getString(msg), Snackbar.LENGTH_SHORT)
+                                .show()
+                        }
                     }
                 }
-            }
         }
 
     }

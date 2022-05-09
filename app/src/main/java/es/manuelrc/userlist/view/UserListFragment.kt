@@ -80,38 +80,47 @@ class UserListFragment : Fragment(), OnUserClickListener {
                     }
             }
             lifecycleScope.launch {
-                snackbarMessage.collect { event ->
-                    val msg = event.getContentIfNotHandled()
-                    if (msg != null && event.peekContent() != 0) {
-                        view?.let {
-                            if (msg == R.string.error_location) mBinding.cbDistance.isChecked =
-                                false
-                            Snackbar.make(mBinding.root, getString(msg), Snackbar.LENGTH_SHORT)
-                                .show()
-                        }
-                    }
-                }
-            }
-            lifecycleScope.launch {
-                isLoading.collect {
-                    mBinding.progressBar.isVisible = it
-                }
-            }
-            lifecycleScope.launch {
-                sortType.collect { event ->
-                    event.getContentIfNotHandled()?.let { order ->
-                        when (order) {
-                            FilterConstrains.OrderedEnum.GENDER -> {
-                                mBinding.cbGender.isChecked = true
-                                mBinding.cbName.isChecked = false
-                            }
-                            FilterConstrains.OrderedEnum.NAME -> {
-                                mBinding.cbGender.isChecked = false
-                                mBinding.cbName.isChecked = true
+                snackbarMessage
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe { event ->
+                        val msg = event.getContentIfNotHandled()
+                        if (msg != null && event.peekContent() != 0) {
+                            view?.let {
+                                if (msg == R.string.error_location) mBinding.cbDistance.isChecked =
+                                    false
+                                Snackbar.make(mBinding.root, getString(msg), Snackbar.LENGTH_SHORT)
+                                    .show()
                             }
                         }
                     }
-                }
+            }
+            lifecycleScope.launch {
+                isLoading
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe {
+                        mBinding.progressBar.isVisible = it
+                    }
+            }
+            lifecycleScope.launch {
+                sortType
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe { event ->
+                        event.getContentIfNotHandled()?.let { order ->
+                            when (order) {
+                                FilterConstrains.OrderedEnum.GENDER -> {
+                                    mBinding.cbGender.isChecked = true
+                                    mBinding.cbName.isChecked = false
+                                }
+                                FilterConstrains.OrderedEnum.NAME -> {
+                                    mBinding.cbGender.isChecked = false
+                                    mBinding.cbName.isChecked = true
+                                }
+                            }
+                        }
+                    }
             }
         }
     }
