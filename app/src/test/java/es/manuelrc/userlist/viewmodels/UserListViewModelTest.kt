@@ -133,7 +133,7 @@ class UserListViewModelTest : TestCase() {
         val users = userListViewModel.mUsers.blockingLast()
         val sortType = userListViewModel.sortType.value
         assert(users is Result.Success && users.data.isNotEmpty() && users.data.all { it.isFavorite }
-                && sortType.peekContent() == FilterConstrains.OrderedEnum.GENDER)
+                &&sortType!=null  && sortType.peekContent() == FilterConstrains.OrderedEnum.GENDER)
 
     }
 

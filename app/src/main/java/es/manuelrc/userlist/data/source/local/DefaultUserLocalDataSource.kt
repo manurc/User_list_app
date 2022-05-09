@@ -3,6 +3,7 @@ package es.manuelrc.userlist.data.source.local
 import es.manuelrc.userlist.data.Result
 import es.manuelrc.userlist.model.UserDao
 import es.manuelrc.userlist.model.UserEntity
+import es.manuelrc.userlist.model.exceptions.DBException
 import es.manuelrc.userlist.model.exceptions.TypeError
 import io.reactivex.Observable
 import javax.inject.Inject

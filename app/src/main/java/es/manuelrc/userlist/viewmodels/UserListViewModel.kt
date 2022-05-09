@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import es.manuelrc.userlist.R
 import es.manuelrc.userlist.data.Result
 import es.manuelrc.userlist.data.source.FilterConstrains
-import es.manuelrc.userlist.data.source.local.DBException
+import es.manuelrc.userlist.model.exceptions.DBException
 import es.manuelrc.userlist.data.source.remote.ApiResponseException
 import es.manuelrc.userlist.model.UserEntity
 import es.manuelrc.userlist.model.exceptions.TypeError
@@ -29,7 +29,7 @@ class UserListViewModel @Inject constructor(private val interactor: UserListInte
     private val _isLoading = BehaviorSubject.createDefault(false)
     val isLoading: Observable<Boolean> get() = _isLoading
     private val _sortType = BehaviorSubject.createDefault(Event(FilterConstrains.OrderedEnum.NAME))
-    val sortType: Observable<Event<FilterConstrains.OrderedEnum>> get() = _sortType
+    val sortType: BehaviorSubject<Event<FilterConstrains.OrderedEnum>> get() = _sortType
     private var currentLocation: Location? = null
     private val _snackbarText = BehaviorSubject.createDefault(Event(0))
     val snackbarMessage: Observable<Event<Int>> = _snackbarText

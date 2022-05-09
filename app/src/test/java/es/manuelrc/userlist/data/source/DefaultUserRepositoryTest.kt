@@ -1,7 +1,7 @@
 package es.manuelrc.userlist.data.source
 
 import es.manuelrc.userlist.data.Result
-import es.manuelrc.userlist.data.source.local.DBException
+import es.manuelrc.userlist.model.exceptions.DBException
 import es.manuelrc.userlist.data.source.local.UserLocalDataSource
 import es.manuelrc.userlist.data.source.remote.ApiResponseException
 import es.manuelrc.userlist.data.source.remote.UserRemoteDataSource

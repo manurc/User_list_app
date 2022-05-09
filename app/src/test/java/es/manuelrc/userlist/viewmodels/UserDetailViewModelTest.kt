@@ -54,7 +54,7 @@ class UserDetailViewModelTest : TestCase() {
         val userSelected = userDetailViewModel.userSelected.value
         val loading = userDetailViewModel.isLoading.value
 
-        assert(userSelected == user && !loading)
+        assert(userSelected == user && loading != null && !loading)
 
     }
 
@@ -67,7 +67,7 @@ class UserDetailViewModelTest : TestCase() {
         val loading = userDetailViewModel.isLoading.value
         val snackbarMessage = userDetailViewModel.snackbarMessage.value
 
-        assert(userSelected == null && !loading && snackbarMessage.peekContent() == R.string.error_obtaining_from_db)
+        assert(userSelected == null && loading != null && !loading && snackbarMessage != null && snackbarMessage.peekContent() == R.string.error_obtaining_from_db)
 
     }
 
