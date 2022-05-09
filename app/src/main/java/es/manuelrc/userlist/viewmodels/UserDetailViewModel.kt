@@ -19,7 +19,6 @@ class UserDetailViewModel @Inject constructor(private val interactor: UserDetail
     private val _isLoading = BehaviorSubject.createDefault(false)
     val isLoading: BehaviorSubject<Boolean> get() = _isLoading
     var userSelected = BehaviorSubject.create<UserEntity>()
-//    val userSelected: BehaviorSubject<UserEntity?> get() = _userSelected
 
     suspend fun findUser(userIdentifier: String) = withContext(Dispatchers.IO) {
         _isLoading.onNext(true)
