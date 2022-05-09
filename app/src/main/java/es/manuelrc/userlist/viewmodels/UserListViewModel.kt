@@ -47,7 +47,9 @@ class UserListViewModel @Inject constructor(private val interactor: UserListInte
 
     fun loadUsers() {
         executeAction {
-            interactor.loadUsers()
+            if(_isLoading.value == true){
+                interactor.loadUsers()
+            }
         }
     }
 
