@@ -26,13 +26,15 @@ class DefaultUserRepository @Inject constructor(
     }
 
     override suspend fun addNewUsers(amount: Int) {
-        val remoteUsers = userRemoteDataSource.getUsers(amount)
-        if (remoteUsers is Result.Success) {
-            remoteUsers.data.forEach {
-                saveUser(it)
+         val remoteUsers = userRemoteDataSource.getUsers(amount)
+        remoteUsers.collect {
+            if (it is Result.Success) {
+                it.data.forEach { user->
+                    saveUser(user)
+                }
+            } else if (it is Result.Error) {
+                throw it.exception
             }
-        } else if (remoteUsers is Result.Error) {
-            throw remoteUsers.exception
         }
     }
 

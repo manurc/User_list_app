@@ -1,6 +1,8 @@
 package es.manuelrc.userlist.data.source.remote
 
 import com.google.gson.Gson
+import com.skydoves.sandwich.ApiResponse
+import com.skydoves.sandwich.SandwichInitializer
 import es.manuelrc.userlist.data.Result
 import es.manuelrc.userlist.data.source.remote.dto.UsersResponse
 import es.manuelrc.userlist.data.source.remote.dto.inner.*
@@ -65,42 +67,59 @@ class DefaultUserRemoteDataSourceTest : TestCase() {
 
     @Test
     fun testGetUsersSuccess() = kotlinx.coroutines.test.runTest(dispatchTimeoutMs = 2_000) {
-        val response = Response.success(UsersResponse(userFromApi))
+
+        val response =
+            ApiResponse.of(SandwichInitializer.successCodeRange) {
+                Response.success(
+                    UsersResponse(
+                        userFromApi
+                    )
+                )
+            }
         coEvery { userApiClient.getUsers(any()) } returns response
         val result = userRemoteDataSource.getUsers(1)
-        assertNotNull(result)
-        assert(result is Result.Success && result.data.all {
-            it.name == userParsed[0].name &&
-                    it.gender == userParsed[0].gender &&
-                    it.email == userParsed[0].email &&
-                    it.location == userParsed[0].location &&
-                    it.phone == userParsed[0].phone &&
-                    it.picture == userParsed[0].picture &&
-                    it.registered == userParsed[0].registered
-        })
+        result.collect {
+            assert(it is Result.Success && it.data.all { user ->
+                user.name == userParsed[0].name &&
+                        user.gender == userParsed[0].gender &&
+                        user.email == userParsed[0].email &&
+                        user.location == userParsed[0].location &&
+                        user.phone == userParsed[0].phone &&
+                        user.picture == userParsed[0].picture &&
+                        user.registered == userParsed[0].registered
+            })
+        }
+
+
     }
 
     @Test
     fun testGetUsersHttpError() = kotlinx.coroutines.test.runTest(dispatchTimeoutMs = 2_000) {
         val serviceError = "generic error"
-        val response = Response.error<UsersResponse>(
-            400, Gson().toJson(serviceError)
-                .toResponseBody("application/json; charset=utf-8".toMediaType())
-        )
+        val response =
+            ApiResponse.of(SandwichInitializer.successCodeRange) {
+                Response.error<UsersResponse>(
+                    400, Gson().toJson(serviceError)
+                        .toResponseBody("application/json; charset=utf-8".toMediaType()))
+            }
         coEvery { userApiClient.getUsers(any()) } returns response
         val result = userRemoteDataSource.getUsers(1)
         assertNotNull(result)
-        assert(result is Result.Error && result.exception is ApiResponseException && (result.exception as ApiResponseException).code == 400)
+        result.collect{
+            assert(it is Result.Error && it.exception is ApiResponseException && (it.exception as ApiResponseException).code == 400)
+        }
     }
 
     @Test
     fun testGetUsersGenericException() =
-        kotlinx.coroutines.test.runTest(dispatchTimeoutMs = 2_000) {
+        kotlinx.coroutines.test.runTest(dispatchTimeoutMs = 122_000) {
             val exception = Exception()
-            coEvery { userApiClient.getUsers(any()) } throws exception
+            val apiResponse = ApiResponse.error<UsersResponse>(exception)
+            coEvery { userApiClient.getUsers(any()) } returns apiResponse
             val result = userRemoteDataSource.getUsers(1)
-            assertNotNull(result)
-            assert(result is Result.Error && result.exception == exception)
+            result.collect{
+                assert(it is Result.Error && it.exception == exception)
+            }
         }
 
 }

@@ -14,6 +14,7 @@ import io.mockk.mockk
 import io.mockk.unmockkAll
 import junit.framework.TestCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.*
 import org.junit.After
 import org.junit.Assert
@@ -54,11 +55,13 @@ class DefaultUserRepositoryTest : TestCase() {
 
     @Test
     fun testEmptyRemoteDataSource() {
-        coEvery { userRemoteDataSource.getUsers(any()) } returns Result.Error(
-            ApiResponseException(
-                400
-            )
-        )
+        coEvery { userRemoteDataSource.getUsers(any()) } returns flow {
+           emit( Result.Error(
+                ApiResponseException(
+                    400
+                )
+            ))
+        }
         Assert.assertThrows(ApiResponseException::class.java) {
             runTest {
                 userRepository.addNewUsers(1)
@@ -80,7 +83,7 @@ class DefaultUserRepositoryTest : TestCase() {
     fun testAddUser() = runTest {
         val fakeLocalDataStore = mutableListOf<UserEntity>()
         val user = listOf(mockk<UserEntity>())
-        coEvery { userRemoteDataSource.getUsers(any()) } returns Result.Success(user)
+        coEvery { userRemoteDataSource.getUsers(any()) } returns flow { emit(Result.Success(user)) }
         coEvery { userLocalDataSource.addNewUser(any()) } coAnswers {
             user.forEach {
                 fakeLocalDataStore.add(

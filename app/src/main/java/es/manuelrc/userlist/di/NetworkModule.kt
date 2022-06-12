@@ -1,6 +1,7 @@
 package es.manuelrc.userlist.di
 
 
+import com.skydoves.sandwich.coroutines.CoroutinesResponseCallAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,6 +20,7 @@ object NetworkModule {
     fun provideRetrofit(): Retrofit {
         return Retrofit.Builder()
             .baseUrl("https://api.randomuser.me/")
+            .addCallAdapterFactory(CoroutinesResponseCallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }

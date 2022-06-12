@@ -15,6 +15,7 @@ import es.manuelrc.userlist.view.utils.Event
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import java.net.UnknownHostException
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -35,7 +36,7 @@ class UserListViewModel @Inject constructor(private val interactor: UserListInte
         CoroutineScope(Dispatchers.Main).launch {
             throwable.printStackTrace()
             var msg = R.string.unknown_error
-            if (throwable.cause is ApiResponseException) {
+            if (throwable is ApiResponseException || throwable is UnknownHostException) {
                 msg = R.string.error_downloading_users
             }
             _snackbarText.value = Event(msg)
@@ -72,7 +73,7 @@ class UserListViewModel @Inject constructor(private val interactor: UserListInte
         this.currentLocation = location
     }
 
-    fun errorLoading(exception: Exception) {
+    fun errorLoading(exception: Throwable) {
         var msg = R.string.unknown_error
         if (exception is DBException) {
             msg = when (exception.type) {
